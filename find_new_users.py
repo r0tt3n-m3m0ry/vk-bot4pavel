@@ -33,11 +33,11 @@ for group_id in list_of_groups:
             users.append(user_id)
 
 for offset in range(0, len(users), 1000):
-    for user in vk.users.get(user_ids=str(users[offset:offset+1000])[1:-1], fields='can_write_private_message'):
+    for user in vk.users.get(user_ids=str(users[offset:offset+1000])[1:-1], fields='can_write_private_message, sex'):
         try:
             print(user['deactivated'])
         except KeyError:
-            if user['can_write_private_message'] == 1:
+            if user['can_write_private_message'] == 1 ans user['sex'] == 1:
                 valid_users.append(user['id'])
 
 for offset in range(0, len(valid_users), 19):

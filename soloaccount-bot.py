@@ -7,10 +7,7 @@ from datetime import datetime
 import time
 
 def send_message(user_id, message):
-    if message[0] == '@':
-        vk.messages.send(user_id=user_id, random_id=vk_api.utils.get_random_id(), message='Держи)', attachment=message[1:])
-    else:
-        vk.messages.send(user_id=user_id, random_id=vk_api.utils.get_random_id(), message=message)
+    vk.messages.send(user_id=user_id, random_id=vk_api.utils.get_random_id(), message=message, attachment='wall-189698764_9')
 
 messages_for_mailing = ['Привет, я тебе скину трек, если он тебе понравится, сможешь проявить активность в группе в качестве подписки или лайка ? А если тебе очень понравится, сможешь оформить подписочку, чтобы не пропустить самое интересное ? Примерно через 2 недели выйдет новый трек ☺ ']
 users_for_mailing = []
@@ -71,7 +68,5 @@ for message in messages_for_mailing:
         except:
             print(f'[{datetime.now().strftime("%H:%M:%S")}] Message cannot be sent!')
         time.sleep(10)
-    print(f'[{datetime.now().strftime("%H:%M:%S")}] Wait 5 minutes...')
-    time.sleep(120)
 
 print('Mailing completed!')
