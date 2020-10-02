@@ -5,7 +5,7 @@ except ModuleNotFoundError:
 
 import pickle
 
-list_of_groups = [142999382]
+list_of_groups = [172831467, 149281650, 136483585, 125278260, 142163794, 173147726, 176686667, 157541471, 136478309, 150729800, 137046595, 122382351, 157681469, 142999382, 107359951, 108337741, 149737697, 160632532, 159536304, 156321274, 145617338, 173425827, 140370178, 163956083, 130686894, 125904625, 159659937, 158366559, 165993707, 157679819, 185109491, 49300993, 145640921, 166027814, 172242906, 123870813, 176374467, 155964596, 161404146]
 
 users = []
 
@@ -37,8 +37,9 @@ for offset in range(0, len(users), 1000):
         try:
             print(user['deactivated'])
         except KeyError:
-            if user['can_write_private_message'] == 1 ans user['sex'] == 1:
+            if user['can_write_private_message'] == 1 and user['sex'] == 1:
                 valid_users.append(user['id'])
+                print(user['id'])
 
 for offset in range(0, len(valid_users), 19):
     print(valid_users[offset:offset+19])
