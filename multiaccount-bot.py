@@ -1,12 +1,14 @@
-try:
-    import vk_api
-except ModuleNotFoundError:
-    print('VK API pip module not found. Please install it before running this script.'); exit()
-
-from datetime import datetime
+import logging
 import random
 import pickle
 import time
+
+logging.basicConfig(format='\n[%(asctime)s] %(message)s', datefmt='%H:%M:%S')
+
+try:
+    import vk_api
+except ModuleNotFoundError:
+    logging.critical('VK API pip module not found. Please install it before running this script.'); exit()
 
 def send_message(vk, user_id, message):
     vk.messages.send(user_id=user_id, random_id=vk_api.utils.get_random_id(), message=message, attachment='wall-189698764_9')
@@ -31,11 +33,11 @@ while True:
                     vk_session.auth()
                     vk = vk_session.get_api()
                 except vk_api.exceptions.BadPassword:
-                    print(f'{vk_login}:{vk_password} Bad password!')
+                    logging.error(f'{vk_login}:{vk_password} Bad password!')
                 except vk_api.exceptions.AuthError:
-                    print(f'{vk_login}:{vk_password} Authorization error! Account deactivated!')
+                    logging.error(f'{vk_login}:{vk_password} Authorization error! Account deactivated!')
                 else:
-                    print(f'{vk_login}:{vk_password} Successfully logged in!')
+                    logging.info(f'{vk_login}:{vk_password} Successfully logged in!')
                     accounts.append(vk)
 
                 time.sleep(5)
@@ -52,12 +54,12 @@ while True:
         for user in range(19):
             try:
                 send_message(account, users_for_mailing.pop(), message_for_mailing)
-                print(f'[{datetime.now().strftime("%H:%M:%S")}] Message sent!')
+                logging.info(f'[https://vk.com/id{account._vk.token["user_id"]}] Message sent!')
             except:
-                print(f'[{datetime.now().strftime("%H:%M:%S")}] Message cannot be sent!')
+                logging.error(f'[https://vk.com/id{account._vk.token["user_id"]}] Message cannot be sent!')
             time.sleep(10)
 
-        print(f'Mailing from account {account} completed!')
+        logging.info(f'Mailing from account https://vk.com/id{account._vk.token["user_id"]} completed!')
 
     print('Mailing completed!')
 
@@ -66,7 +68,7 @@ while True:
 
     end_time = time.monotonic()
 
-    print(f'[{datetime.now().strftime("%H:%M:%S")}] Sleep for {86400 - (end_time - start_time)}...')
+    logging.info(f'Sleep for {86400 - (end_time - start_time)}...')
     time.sleep(86400 - (end_time - start_time))
 
     del(end_time, start_time)

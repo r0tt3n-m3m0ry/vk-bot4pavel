@@ -1,10 +1,13 @@
+import logging
+import time
+
+logging.basicConfig(format='\n[%(asctime)s] %(message)s', datefmt='%H:%M:%S')
+
 try:
     import vk_api
 except ModuleNotFoundError:
-    print('VK API pip module not found. Please install it before running this script.'); exit()
+    logging.critical('VK API pip module not found. Please install it before running this script.'); exit()
 
-from datetime import datetime
-import time
 
 def send_message(user_id, message):
     vk.messages.send(user_id=user_id, random_id=vk_api.utils.get_random_id(), message=message, attachment='wall-189698764_9')
@@ -23,11 +26,11 @@ while True:
         vk_session.auth()
         vk = vk_session.get_api()
     except vk_api.exceptions.BadPassword:
-        print('Bad password!')
+        logging.error('Bad password!')
     except vk_api.exceptions.AuthError:
-        print('Authorization error! Account deactivated!')
+        logging.error('Authorization error! Account deactivated!')
     else:
-        print('Successfully logged in!')
+        logging.info('Successfully logged in!')
         break
 
 if len(users_for_mailing) == 0:
@@ -64,9 +67,9 @@ for message in messages_for_mailing:
     for user_id in users_for_mailing:
         try:
             send_message(user_id, message)
-            print(f'[{datetime.now().strftime("%H:%M:%S")}] Message sent!')
+            logging.info(f'Message sent!')
         except:
-            print(f'[{datetime.now().strftime("%H:%M:%S")}] Message cannot be sent!')
+            logging.info(f'Message cannot be sent!')
         time.sleep(10)
 
-print('Mailing completed!')
+logging.info('Mailing completed!')
