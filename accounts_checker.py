@@ -1,12 +1,16 @@
 import logging
 import time
+import os
 
-logging.basicConfig(format='\n[%(asctime)s] %(message)s', datefmt='%H:%M:%S')
+logging.basicConfig(format='\n[%(asctime)s] %(message)s', datefmt='%H:%M:%S', level=logging.INFO)
 
 try:
 	import vk_api
 except ModuleNotFoundError:
 	logging.critical('VK API pip module not found. Please install it before running this script.'); exit()
+
+if os.path.exists('vk_config.v2.json'):
+    os.remove('vk_config.v2.json')
 
 file_headers = ['# All credentials must be in format vk_login:vk_pass', '# For example, 89999999999:qwerty123', '# Lines with \'#\' in the start of string will be ignored', '# Created by @r0tt3n-m3m0ry for Pavel Bocharov (Matteo), 2020\n']
 

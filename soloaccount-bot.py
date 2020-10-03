@@ -1,16 +1,19 @@
 import logging
 import time
+import os
 
-logging.basicConfig(format='\n[%(asctime)s] %(message)s', datefmt='%H:%M:%S')
+logging.basicConfig(format='\n[%(asctime)s] %(message)s', datefmt='%H:%M:%S', level=logging.INFO)
 
 try:
     import vk_api
 except ModuleNotFoundError:
     logging.critical('VK API pip module not found. Please install it before running this script.'); exit()
 
-
 def send_message(user_id, message):
     vk.messages.send(user_id=user_id, random_id=vk_api.utils.get_random_id(), message=message, attachment='wall-189698764_9')
+
+if os.path.exists('vk_config.v2.json'):
+    os.remove('vk_config.v2.json')
 
 messages_for_mailing = ['Привет, я тебе скину трек, если он тебе понравится, сможешь проявить активность в группе в качестве подписки или лайка ? А если тебе очень понравится, сможешь оформить подписочку, чтобы не пропустить самое интересное ? Примерно через 2 недели выйдет новый трек ☺ ']
 users_for_mailing = []

@@ -2,8 +2,9 @@ import logging
 import random
 import pickle
 import time
+import os
 
-logging.basicConfig(format='\n[%(asctime)s] %(message)s', datefmt='%H:%M:%S')
+logging.basicConfig(format='\n[%(asctime)s] %(message)s', datefmt='%H:%M:%S', level=logging.INFO)
 
 try:
     import vk_api
@@ -12,6 +13,9 @@ except ModuleNotFoundError:
 
 def send_message(vk, user_id, message):
     vk.messages.send(user_id=user_id, random_id=vk_api.utils.get_random_id(), message=message, attachment='wall-189698764_9')
+
+if os.path.exists('vk_config.v2.json'):
+    os.remove('vk_config.v2.json')
 
 message_for_mailing = 'Привет, я тебе скину трек, если он тебе понравится, сможешь проявить активность в группе в качестве подписки или лайка ? А если тебе очень понравится, сможешь оформить подписочку, чтобы не пропустить самое интересное ? Примерно через 2 недели выйдет новый трек ☺ '
 
@@ -68,7 +72,7 @@ while True:
 
     end_time = time.monotonic()
 
-    logging.info(f'Sleep for {86400 - (end_time - start_time)}...')
+    logging.info(f'Sleep for {int(86400 - (end_time - start_time))} seconds...')
     time.sleep(86400 - (end_time - start_time))
 
     del(end_time, start_time)
