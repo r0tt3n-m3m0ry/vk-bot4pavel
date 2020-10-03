@@ -1,7 +1,7 @@
-# All credentials for bot must be in format vk_login:vk_pass.
+# All credentials must be in format vk_login:vk_pass
 # For example, 89999999999:qwerty123
 # Lines with '#' in the start of string will be ignored
-# Created by @r0tt3n-m3m0ry for Pavel Bocharov, 2020
+# Created by @r0tt3n-m3m0ry for Pavel Bocharov (Matteo), 2020
 
 89032270923:Matteo21
 89097077501:Matteo21
