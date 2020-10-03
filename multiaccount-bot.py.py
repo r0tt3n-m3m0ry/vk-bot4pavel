@@ -13,48 +13,60 @@ def send_message(vk, user_id, message):
 
 message_for_mailing = 'Привет, я тебе скину трек, если он тебе понравится, сможешь проявить активность в группе в качестве подписки или лайка ? А если тебе очень понравится, сможешь оформить подписочку, чтобы не пропустить самое интересное ? Примерно через 2 недели выйдет новый трек ☺ '
 
-accounts = []
-
 vk_app_id = '2685278'
 
-with open('accounts.txt') as file_accounts:
-    for string_with_credentials in file_accounts:
-        if string_with_credentials[0] != '#' and string_with_credentials.strip() != '':
-            vk_login = string_with_credentials.split(':')[0].strip()
-            vk_password = string_with_credentials.split(':')[1].strip()
+while True:
+    start_time = time.monotonic()
 
+    accounts = []
+
+    with open('accounts.txt') as file_accounts:
+        for string_with_credentials in file_accounts:
+            if string_with_credentials[0] != '#' and string_with_credentials.strip() != '':
+                vk_login = string_with_credentials.split(':')[0].strip()
+                vk_password = string_with_credentials.split(':')[1].strip()
+
+                try:
+                    vk_session = vk_api.VkApi(login=vk_login, password=vk_password, app_id=vk_app_id)
+                    vk_session.auth()
+                    vk = vk_session.get_api()
+                except vk_api.exceptions.BadPassword:
+                    print(f'{vk_login}:{vk_password} Bad password!')
+                except vk_api.exceptions.AuthError:
+                    print(f'{vk_login}:{vk_password} Authorization error! Account deactivated!')
+                else:
+                    print(f'{vk_login}:{vk_password} Successfully logged in!')
+                    accounts.append(vk)
+
+                time.sleep(5)
+
+    print(f'Active accounts: {len(accounts)}')
+
+    with open('users.txt', 'rb') as file_with_users:
+        users_for_mailing = pickle.load(file_with_users)
+
+    for times in range(random.randint(15, 30)):
+        random.shuffle(users_for_mailing)
+
+    for account in accounts:
+        for user in range(19):
             try:
-                vk_session = vk_api.VkApi(login=vk_login, password=vk_password, app_id=vk_app_id)
-                vk_session.auth()
-                vk = vk_session.get_api()
-            except vk_api.exceptions.BadPassword:
-                print('Bad password!')
-            except vk_api.exceptions.AuthError:
-                print('Authorization error! Account deactivated!')
-            else:
-                print('Successfully logged in!')
-                accounts.append(vk)
+                send_message(account, users_for_mailing.pop(), message_for_mailing)
+                print(f'[{datetime.now().strftime("%H:%M:%S")}] Message sent!')
+            except:
+                print(f'[{datetime.now().strftime("%H:%M:%S")}] Message cannot be sent!')
+            time.sleep(10)
 
-            time.sleep(5)
+        print(f'Mailing from account {account} completed!')
 
-print(f'Active accounts: {len(accounts)}')
+    print('Mailing completed!')
 
-with open('users.txt', 'rb') as file_with_users:
-    users_for_mailing = pickle.load(file_with_users)
+    with open('users.txt', 'wb') as file_users:
+        pickle.dump(users_for_mailing, file_users)
 
-for times in range(random.randint(15, 30)):
-    random.shuffle(users_for_mailing)
+    end_time = time.monotonic()
 
-for account in accounts:
-    for user in range(19):
-        try:
-            send_message(account, users_for_mailing.pop(), message_for_mailing)
-            print(f'[{datetime.now().strftime("%H:%M:%S")}] Message sent!')
-        except:
-            print(f'[{datetime.now().strftime("%H:%M:%S")}] Message cannot be sent!')
-        time.sleep(10)
+    print(f'[{datetime.now().strftime("%H:%M:%S")}] Sleep for {86400 - (end_time - start_time)}...')
+    time.sleep(86400 - (end_time - start_time))
 
-print('Mailing completed!')
-
-with open('users.txt', 'wb') as file_users:
-    pickle.dump(users_for_mailing, file_users)
+    del(end_time, start_time)
