@@ -30,8 +30,8 @@ with open('accounts.txt') as file_accounts:
 				vk = vk_session.get_api()
 			except vk_api.exceptions.BadPassword:
 				logging.error(f'{vk_login}:{vk_password} Bad password!')
-			except vk_api.exceptions.AuthError:
-				logging.error(f'{vk_login}:{vk_password} Authorization error! Account deactivated!')
+			except vk_api.exceptions.AccountBlocked:
+				logging.error(f'{vk_login}:{vk_password} Account blocked!')
 			else:
 				logging.info(f'{vk_login}:{vk_password} Successfully logged in!')
 
@@ -39,9 +39,11 @@ with open('accounts.txt') as file_accounts:
 
 				accounts.append(f'{vk_login}:{vk_password}')
 
-				time.sleep(5)
+			time.sleep(10)
 
 logging.info(f'Active accounts: {count_of_active_accounts}')
+
+accounts.sort()
 
 with open('accounts.txt', 'w') as file_accounts:
 	for header in file_headers:

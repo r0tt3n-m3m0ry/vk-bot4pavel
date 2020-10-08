@@ -58,12 +58,12 @@ while True:
         for user in range(19):
             try:
                 send_message(account, users_for_mailing.pop(), message_for_mailing)
-                logging.info(f'[https://vk.com/id{account._vk.token["user_id"]}] Message sent!')
+                logging.info(f'[https://vk.com/id{account._vk.token["user_id"]}] [{account._vk.login}:{account._vk.password}] Message sent!')
             except:
-                logging.error(f'[https://vk.com/id{account._vk.token["user_id"]}] Message cannot be sent!')
+                logging.error(f'[https://vk.com/id{account._vk.token["user_id"]}] [{account._vk.login}:{account._vk.password}] Message cannot be sent!')
             time.sleep(10)
 
-        logging.info(f'Mailing from account https://vk.com/id{account._vk.token["user_id"]} completed!')
+        logging.info(f'Mailing from account https://vk.com/id{account._vk.token["user_id"]} ({account._vk.login}:{account._vk.password}) completed!')
 
     print('Mailing completed!')
 
