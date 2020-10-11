@@ -12,7 +12,7 @@ except ModuleNotFoundError:
     logging.critical('VK API pip module not found. Please install it before running this script.'); exit()
 
 def send_message(vk, user_id, message):
-    vk.messages.send(user_id=user_id, random_id=vk_api.utils.get_random_id(), message=message, attachment='wall-189698764_9')
+    vk.messages.send(user_id=user_id, random_id=vk_api.utils.get_random_id(), message=message, attachment='wall-189698764_165')
 
 if os.path.exists('vk_config.v2.json'):
     os.remove('vk_config.v2.json')
@@ -40,6 +40,8 @@ while True:
                     logging.error(f'{vk_login}:{vk_password} Bad password!')
                 except vk_api.exceptions.AuthError:
                     logging.error(f'{vk_login}:{vk_password} Authorization error! Account deactivated!')
+                except vk_api.exceptions.Captcha:
+                    pass
                 else:
                     logging.info(f'{vk_login}:{vk_password} Successfully logged in!')
                     accounts.append(vk)
